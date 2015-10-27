@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class HashMap<K, V> {
 
-    private List<Bucket<K, V>> buckets = new ArrayList<>();
+    private final List<Bucket<K, V>> buckets = new ArrayList<>();
 
     private int mapSize = 0;
 
@@ -47,7 +47,7 @@ public class HashMap<K, V> {
         while (buckets.size() < bucketCount*2) buckets.add(new Bucket<>(this));
         // By growing the amount of buckets the mapped indices have become invalid,
         // resetting them ...
-        buckets.subList(0, bucketCount).forEach((bucket) -> bucket.reset());
+        buckets.subList(0, bucketCount).forEach(Bucket::reset);
     }
 
     /**

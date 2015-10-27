@@ -39,7 +39,7 @@ class Bucket<K, V> {
      * @return                  true if this bucket already had one or
      *                          more items(collision), false otherwise.
      */
-    protected boolean insert(K key, V value) {
+    boolean insert(K key, V value) {
         if (get(key) != null) throw new RuntimeException("Duplicate key");
         boolean isEmpty = tuples.isEmpty();
         tuples.add(new KeyValuePair(key, value));
@@ -52,7 +52,7 @@ class Bucket<K, V> {
      * @return                  the value, or if this bucket did not hold
      *                          a value mapped to the key, null.
      */
-    protected V get(K key) {
+    V get(K key) {
         for (KeyValuePair tuple : tuples) {
             if (tuple.key == key) {
                 return tuple.value;
@@ -66,7 +66,7 @@ class Bucket<K, V> {
      * grown. This function clears the entire bucket after placing
      * the mapped values to their new correct buckets.
      */
-    protected void reset() {
+    void reset() {
         if (!tuples.isEmpty()) {
             List<KeyValuePair> oldValues = new LinkedList<>(tuples);
             tuples.clear();
