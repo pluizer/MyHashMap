@@ -47,7 +47,10 @@ public class HashMap<K, V> {
         while (buckets.size() < bucketCount*2) buckets.add(new Bucket<>(this));
         // By growing the amount of buckets the mapped indices have become invalid,
         // resetting them ...
-        buckets.subList(0, bucketCount).forEach(Bucket::reset);
+        // (Buckets will be modified during this loop so we cannot use iteration.)
+        for (int i=0; i<bucketCount; i++) {
+            buckets.get(i).reset();
+        }
     }
 
     /**
