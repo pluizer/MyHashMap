@@ -47,7 +47,10 @@ public class HashMap<K, V> {
         while (buckets.size() < bucketCount*2) buckets.add(new Bucket<>(this));
         // By growing the amount of buckets the mapped indices have become invalid,
         // resetting them ...
-        buckets.subList(0, bucketCount).forEach(Bucket::reset);
+        // (Buckets will be modified during this loop so we cannot use iteration.)
+        for (int i=0; i<bucketCount; i++) {
+            buckets.get(i).reset();
+        }
     }
 
     /**
@@ -62,11 +65,14 @@ public class HashMap<K, V> {
     }
 
     /**
-     * Maps a key to a value.
+     * Maps a key to a value. Mapping a non-unique key will result
+     * in a RuntimeException.
      * @param key               the key to use
+     * @param update            when inserting a non unique key update the
+     *                          value (true) or throw a RuntimeException (false)
      * @param value             the value to map
      */
-    public void insert(K key, V value) {
+    public void insert(K key, V value, boolean update) {
         boolean collided = buckets.get(getIndex(key)).insert(key, value);
         mapSize++;
         // Simple naive way to test if the amount of buckets must be grown
@@ -77,6 +83,16 @@ public class HashMap<K, V> {
         if (collided && buckets.size() / 2 <= size()) {
             growBuckets();
         }
+    }
+
+    /**
+     * Maps a key to a value. Mapping a non-unique key will result
+     * in a RuntimeException.
+     * @param key               the key to use
+     * @param value             the value to map
+     */
+    public void insert(K key, V value) {
+        insert(key, value, false);
     }
 
     /**
