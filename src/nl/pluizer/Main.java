@@ -18,15 +18,24 @@ public class Main {
         System.out.println(map.get("Berend"));  // Should print "de Boer"
         System.out.println(map.get("Piet"));    // Should print "null"
 
-        HashMap<String, String> map2 = new HashMap<>(object -> {
-            int hash = 0;
-            String string = object.toString();
-            for (int i=0; i<string.length(); i++) {
-                char ch = string.charAt(i);
-                hash ^= ch << ((7*i) % 32);
-            }
-            return hash;
-        });
+        HashMap<String, String> map2 = new HashMap<>
+                /*
+                 * A trivial hashing function, just in case that using
+                 * .hashCode could be considered a cheat
+                 * The object will be converted to a string and each character
+                 * will be xor-ed with a the resulting hash. Shifting 7 bits
+                 * each time. Because this is a prime number and just short of
+                 * a byte a guess this will create a nice overlap.
+                 */
+                (object -> {
+                    int hash = 0;
+                    String string = object.toString();
+                    for (int i=0; i<string.length(); i++) {
+                        char ch = string.charAt(i);
+                        hash ^= ch << ((7*i) % 32);
+                    }
+                    return hash;
+                });
 
         System.out.println();
 
