@@ -32,7 +32,7 @@ public class Main {
                     String string = object.toString();
                     for (int i=0; i<string.length(); i++) {
                         char ch = string.charAt(i);
-                        hash ^= ch << ((7*i) % 32);
+                        hash ^= ch << (7*i) % 32;
                     }
                     return hash;
                 });
@@ -50,6 +50,5 @@ public class Main {
         System.out.println(map2.get("Kees"));    // Should print "de Kat"
         System.out.println(map2.get("Berend"));  // Should print "de Boer"
         System.out.println(map2.get("Piet"));    // Should print "null"
-
     }
 }
