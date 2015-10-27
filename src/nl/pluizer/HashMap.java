@@ -62,12 +62,15 @@ public class HashMap<K, V> {
     }
 
     /**
-     * Maps a key to a value.
+     * Maps a key to a value. Mapping a non-unique key will result
+     * in a RuntimeException.
      * @param key               the key to use
+     * @param update            when inserting a non unique key update the
+     *                          value (true) or throw a RuntimeException (false)
      * @param value             the value to map
      */
-    public void insert(K key, V value) {
-        boolean collided = buckets.get(getIndex(key)).insert(key, value);
+    public void insert(K key, V value, boolean update) {
+        boolean collided = buckets.get(getIndex(key)).insert(key, value, update);
         mapSize++;
         // Simple naive way to test if the amount of buckets must be grown
         // by checking if this key collided with an other.
@@ -77,6 +80,16 @@ public class HashMap<K, V> {
         if (collided && buckets.size() / 2 <= size()) {
             growBuckets();
         }
+    }
+
+    /**
+     * Maps a key to a value. Mapping a non-unique key will result
+     * in a RuntimeException.
+     * @param key               the key to use
+     * @param value             the value to map
+     */
+    public void insert(K key, V value) {
+        insert(key, value, false);
     }
 
     /**

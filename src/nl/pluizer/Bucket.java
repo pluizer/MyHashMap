@@ -16,7 +16,7 @@ class Bucket<K, V> {
      * A simple key-value tuple.
      */
     private class KeyValuePair {
-        final K key; final V value;
+        final K key; V value;
 
         KeyValuePair(K key, V value) {
             this.key = key;
@@ -24,7 +24,7 @@ class Bucket<K, V> {
         }
     }
 
-    private final List<KeyValuePair> tuples = new LinkedList<>();
+    private final List<KeyValuePair> pairs = new LinkedList<>();
 
     private final HashMap<K, V> hashMap;
 
@@ -39,10 +39,19 @@ class Bucket<K, V> {
      * @return                  true if this bucket already had one or
      *                          more items(collision), false otherwise.
      */
-    boolean insert(K key, V value) {
-        if (get(key) != null) throw new RuntimeException("Duplicate key");
-        boolean isEmpty = tuples.isEmpty();
-        tuples.add(new KeyValuePair(key, value));
+    boolean insert(K key, V value, boolean update) {
+        if (get(key) != null && !update) {
+            throw new RuntimeException("Duplicate key");
+        } else {
+            for (KeyValuePair pair : pairs) {
+                if (pair.key == key) {
+                    pair.value = value;
+                    break; // Bucket can only hold one unique key.
+                }
+            }
+        }
+        boolean isEmpty = pairs.isEmpty();
+        pairs.add(new KeyValuePair(key, value));
         return !isEmpty;
     }
 
@@ -53,7 +62,7 @@ class Bucket<K, V> {
      *                          a value mapped to the key, null.
      */
     V get(K key) {
-        for (KeyValuePair tuple : tuples) {
+        for (KeyValuePair tuple : pairs) {
             if (tuple.key == key) {
                 return tuple.value;
             }
@@ -67,10 +76,10 @@ class Bucket<K, V> {
      * the mapped values to their new correct buckets.
      */
     void reset() {
-        if (!tuples.isEmpty()) {
-            List<KeyValuePair> oldValues = new LinkedList<>(tuples);
-            tuples.clear();
-            oldValues.forEach((tuple) -> hashMap.insert(tuple.key, tuple.value));
+        if (!pairs.isEmpty()) {
+            List<KeyValuePair> oldValues = new LinkedList<>(pairs);
+            pairs.clear();
+            oldValues.forEach((tuple) -> hashMap.insert(tuple.key, tuple.value, true));
         }
     }
 }
