@@ -44,7 +44,7 @@ class Bucket<K, V> {
             throw new RuntimeException("Duplicate key");
         } else {
             for (KeyValuePair pair : pairs) {
-                if (pair.key == key) {
+                if (pair.key.equals(key)) {
                     pair.value = value;
                     break; // Bucket can only hold one unique key.
                 }
@@ -63,7 +63,7 @@ class Bucket<K, V> {
      */
     V get(K key) {
         for (KeyValuePair tuple : pairs) {
-            if (tuple.key == key) {
+            if (tuple.key.equals(key)) {
                 return tuple.value;
             }
         }
