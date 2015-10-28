@@ -43,7 +43,7 @@ class Bucket<K, V> {
     boolean insert(K key, V value, boolean update) {
         if (get(key) != null && !update) {
             throw new RuntimeException("Duplicate key");
-        } else {
+        } else if (update) {
             for (KeyValuePair pair : pairs) {
                 if (pair.key.equals(key)) {
                     pair.value = value;
