@@ -106,7 +106,7 @@ public class HashMap<K, V> {
     /**
      * Returns the value mapped to key.
      * @param key               the key
-     * @return                  the value of the key ot
+     * @return                  the value of the key or
      *                          null if there is no such key
      */
     public V get(K key) {
