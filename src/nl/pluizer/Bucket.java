@@ -16,7 +16,8 @@ class Bucket<K, V> {
      * A simple key-value tuple.
      */
     private class KeyValuePair {
-        final K key; V value;
+        final K key;
+        V value;
 
         KeyValuePair(K key, V value) {
             this.key = key;
@@ -46,7 +47,7 @@ class Bucket<K, V> {
             for (KeyValuePair pair : pairs) {
                 if (pair.key.equals(key)) {
                     pair.value = value;
-                    break; // Bucket can only hold one unique key.
+                    return pairs.size() > 1; // Bucket can only hold one unique key.
                 }
             }
         }
