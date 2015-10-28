@@ -70,7 +70,7 @@ class Bucket<K, V> {
         if (!tuples.isEmpty()) {
             List<KeyValuePair> oldValues = new LinkedList<>(tuples);
             tuples.clear();
-            oldValues.forEach((tuple) -> hashMap.insert(tuple.key, tuple.value));
+            oldValues.forEach(tuple -> hashMap.insert(tuple.key, tuple.value));
         }
     }
 }
