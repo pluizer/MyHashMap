@@ -54,7 +54,7 @@ class Bucket<K, V> {
      */
     V get(K key) {
         for (KeyValuePair tuple : tuples) {
-            if (tuple.key == key) {
+            if (tuple.key.equals(key)) {
                 return tuple.value;
             }
         }
